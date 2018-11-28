@@ -1,6 +1,36 @@
 use std::collections::HashMap;
 
-type TokenType = &'static str;
+#[derive(Clone, Debug, PartialEq)]
+pub enum TokenType {
+    ILLEGAL,
+    EOF,
+    IDENT,
+    INT,
+    ASSIGN,
+    PLUS,
+    MINUS,
+    BANG,
+    ASTERISK,
+    SLASH,
+    LT,
+    GT,
+    EQ,
+    NOT_EQ,
+    COMMA,
+    SEMICOLON,
+    LPAREN,
+    RPAREN,
+    LBRACE,
+    RBRACE,
+    FUNCTION,
+    LET,
+    TRUE,
+    FALSE,
+    IF,
+    ELSE,
+    RETURN,
+}
+//type TokenType = &'static str;
 
 #[derive(Clone, Debug, PartialEq)]
 pub struct Token {
@@ -17,6 +47,7 @@ impl Token {
     }
 }
 
+/*
 pub const ILLEGAL: &'static str = "ILLEGAL";
 pub const EOF: &'static str = "EOF";
 
@@ -53,26 +84,25 @@ pub const TRUE: &'static str = "TRUE";
 pub const FALSE: &'static str = "FALSE";
 pub const ELSE: &'static str = "ELSE";
 pub const RETURN: &'static str = "RETURN";
-
-// operators
+*/
 
 lazy_static! {
-    static ref KEYWORDS: HashMap<&'static str, &'static str> = {
+    static ref KEYWORDS: HashMap<&'static str, TokenType> = {
         let mut m = HashMap::new();
-        m.insert("fn", FUNCTION);
-        m.insert("let", LET);
-        m.insert("true", TRUE);
-        m.insert("false", FALSE);
-        m.insert("if", IF);
-        m.insert("else", ELSE);
-        m.insert("return", RETURN);
+        m.insert("fn", TokenType::FUNCTION);
+        m.insert("let", TokenType::LET);
+        m.insert("true", TokenType::TRUE);
+        m.insert("false", TokenType::FALSE);
+        m.insert("if", TokenType::IF);
+        m.insert("else", TokenType::ELSE);
+        m.insert("return", TokenType::RETURN);
         m
     };
 }
 
 pub fn lookup_ident(ident: &String) -> TokenType {
     match KEYWORDS.get(ident.as_str()) {
-        Some(tok) => tok,
-        None => IDENT,
+        Some(tok) => tok.clone(),
+        None => TokenType::IDENT,
     }
 }

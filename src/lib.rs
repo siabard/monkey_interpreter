@@ -1,6 +1,7 @@
 #[macro_use]
 extern crate lazy_static;
 
+pub mod ast;
 pub mod lexer;
 pub mod repl;
 pub mod token;
@@ -17,15 +18,39 @@ mod tests {
 
         let mut l = Lexer::new(input);
 
-        assert_eq!(Token::new(ASSIGN, &"=".to_string()), l.next_token());
-        assert_eq!(Token::new(PLUS, &"+".to_string()), l.next_token());
-        assert_eq!(Token::new(LPAREN, &"(".to_string()), l.next_token());
-        assert_eq!(Token::new(RPAREN, &")".to_string()), l.next_token());
-        assert_eq!(Token::new(LBRACE, &"{".to_string()), l.next_token());
-        assert_eq!(Token::new(RBRACE, &"}".to_string()), l.next_token());
-        assert_eq!(Token::new(COMMA, &",".to_string()), l.next_token());
-        assert_eq!(Token::new(SEMICOLON, &";".to_string()), l.next_token());
-        assert_eq!(Token::new(EOF, &"".to_string()), l.next_token());
+        assert_eq!(
+            Token::new(TokenType::ASSIGN, &"=".to_string()),
+            l.next_token()
+        );
+        assert_eq!(
+            Token::new(TokenType::PLUS, &"+".to_string()),
+            l.next_token()
+        );
+        assert_eq!(
+            Token::new(TokenType::LPAREN, &"(".to_string()),
+            l.next_token()
+        );
+        assert_eq!(
+            Token::new(TokenType::RPAREN, &")".to_string()),
+            l.next_token()
+        );
+        assert_eq!(
+            Token::new(TokenType::LBRACE, &"{".to_string()),
+            l.next_token()
+        );
+        assert_eq!(
+            Token::new(TokenType::RBRACE, &"}".to_string()),
+            l.next_token()
+        );
+        assert_eq!(
+            Token::new(TokenType::COMMA, &",".to_string()),
+            l.next_token()
+        );
+        assert_eq!(
+            Token::new(TokenType::SEMICOLON, &";".to_string()),
+            l.next_token()
+        );
+        assert_eq!(Token::new(TokenType::EOF, &"".to_string()), l.next_token());
     }
 
     #[test]
@@ -54,87 +79,273 @@ if (5 < 10) {
 
         let mut l = Lexer::new(input);
 
-        assert_eq!(Token::new(LET, &"let".to_string()), l.next_token());
-        assert_eq!(Token::new(IDENT, &"five".to_string()), l.next_token());
-        assert_eq!(Token::new(ASSIGN, &"=".to_string()), l.next_token());
-        assert_eq!(Token::new(INT, &"5".to_string()), l.next_token());
-        assert_eq!(Token::new(SEMICOLON, &";".to_string()), l.next_token());
+        assert_eq!(
+            Token::new(TokenType::LET, &"let".to_string()),
+            l.next_token()
+        );
+        assert_eq!(
+            Token::new(TokenType::IDENT, &"five".to_string()),
+            l.next_token()
+        );
+        assert_eq!(
+            Token::new(TokenType::ASSIGN, &"=".to_string()),
+            l.next_token()
+        );
+        assert_eq!(Token::new(TokenType::INT, &"5".to_string()), l.next_token());
+        assert_eq!(
+            Token::new(TokenType::SEMICOLON, &";".to_string()),
+            l.next_token()
+        );
 
-        assert_eq!(Token::new(LET, &"let".to_string()), l.next_token());
-        assert_eq!(Token::new(IDENT, &"ten".to_string()), l.next_token());
-        assert_eq!(Token::new(ASSIGN, &"=".to_string()), l.next_token());
-        assert_eq!(Token::new(INT, &"10".to_string()), l.next_token());
-        assert_eq!(Token::new(SEMICOLON, &";".to_string()), l.next_token());
+        assert_eq!(
+            Token::new(TokenType::LET, &"let".to_string()),
+            l.next_token()
+        );
+        assert_eq!(
+            Token::new(TokenType::IDENT, &"ten".to_string()),
+            l.next_token()
+        );
+        assert_eq!(
+            Token::new(TokenType::ASSIGN, &"=".to_string()),
+            l.next_token()
+        );
+        assert_eq!(
+            Token::new(TokenType::INT, &"10".to_string()),
+            l.next_token()
+        );
+        assert_eq!(
+            Token::new(TokenType::SEMICOLON, &";".to_string()),
+            l.next_token()
+        );
 
-        assert_eq!(Token::new(LET, &"let".to_string()), l.next_token());
-        assert_eq!(Token::new(IDENT, &"add".to_string()), l.next_token());
-        assert_eq!(Token::new(ASSIGN, &"=".to_string()), l.next_token());
-        assert_eq!(Token::new(FUNCTION, &"fn".to_string()), l.next_token());
-        assert_eq!(Token::new(LPAREN, &"(".to_string()), l.next_token());
-        assert_eq!(Token::new(IDENT, &"x".to_string()), l.next_token());
-        assert_eq!(Token::new(COMMA, &",".to_string()), l.next_token());
-        assert_eq!(Token::new(IDENT, &"y".to_string()), l.next_token());
-        assert_eq!(Token::new(RPAREN, &")".to_string()), l.next_token());
-        assert_eq!(Token::new(LBRACE, &"{".to_string()), l.next_token());
+        assert_eq!(
+            Token::new(TokenType::LET, &"let".to_string()),
+            l.next_token()
+        );
+        assert_eq!(
+            Token::new(TokenType::IDENT, &"add".to_string()),
+            l.next_token()
+        );
+        assert_eq!(
+            Token::new(TokenType::ASSIGN, &"=".to_string()),
+            l.next_token()
+        );
+        assert_eq!(
+            Token::new(TokenType::FUNCTION, &"fn".to_string()),
+            l.next_token()
+        );
+        assert_eq!(
+            Token::new(TokenType::LPAREN, &"(".to_string()),
+            l.next_token()
+        );
+        assert_eq!(
+            Token::new(TokenType::IDENT, &"x".to_string()),
+            l.next_token()
+        );
+        assert_eq!(
+            Token::new(TokenType::COMMA, &",".to_string()),
+            l.next_token()
+        );
+        assert_eq!(
+            Token::new(TokenType::IDENT, &"y".to_string()),
+            l.next_token()
+        );
+        assert_eq!(
+            Token::new(TokenType::RPAREN, &")".to_string()),
+            l.next_token()
+        );
+        assert_eq!(
+            Token::new(TokenType::LBRACE, &"{".to_string()),
+            l.next_token()
+        );
 
-        assert_eq!(Token::new(IDENT, &"x".to_string()), l.next_token());
-        assert_eq!(Token::new(PLUS, &"+".to_string()), l.next_token());
-        assert_eq!(Token::new(IDENT, &"y".to_string()), l.next_token());
-        assert_eq!(Token::new(SEMICOLON, &";".to_string()), l.next_token());
-        assert_eq!(Token::new(RBRACE, &"}".to_string()), l.next_token());
-        assert_eq!(Token::new(SEMICOLON, &";".to_string()), l.next_token());
+        assert_eq!(
+            Token::new(TokenType::IDENT, &"x".to_string()),
+            l.next_token()
+        );
+        assert_eq!(
+            Token::new(TokenType::PLUS, &"+".to_string()),
+            l.next_token()
+        );
+        assert_eq!(
+            Token::new(TokenType::IDENT, &"y".to_string()),
+            l.next_token()
+        );
+        assert_eq!(
+            Token::new(TokenType::SEMICOLON, &";".to_string()),
+            l.next_token()
+        );
+        assert_eq!(
+            Token::new(TokenType::RBRACE, &"}".to_string()),
+            l.next_token()
+        );
+        assert_eq!(
+            Token::new(TokenType::SEMICOLON, &";".to_string()),
+            l.next_token()
+        );
 
-        assert_eq!(Token::new(LET, &"let".to_string()), l.next_token());
-        assert_eq!(Token::new(IDENT, &"result".to_string()), l.next_token());
-        assert_eq!(Token::new(ASSIGN, &"=".to_string()), l.next_token());
-        assert_eq!(Token::new(IDENT, &"add".to_string()), l.next_token());
-        assert_eq!(Token::new(LPAREN, &"(".to_string()), l.next_token());
-        assert_eq!(Token::new(IDENT, &"five".to_string()), l.next_token());
-        assert_eq!(Token::new(COMMA, &",".to_string()), l.next_token());
-        assert_eq!(Token::new(IDENT, &"ten".to_string()), l.next_token());
-        assert_eq!(Token::new(RPAREN, &")".to_string()), l.next_token());
-        assert_eq!(Token::new(SEMICOLON, &";".to_string()), l.next_token());
+        assert_eq!(
+            Token::new(TokenType::LET, &"let".to_string()),
+            l.next_token()
+        );
+        assert_eq!(
+            Token::new(TokenType::IDENT, &"result".to_string()),
+            l.next_token()
+        );
+        assert_eq!(
+            Token::new(TokenType::ASSIGN, &"=".to_string()),
+            l.next_token()
+        );
+        assert_eq!(
+            Token::new(TokenType::IDENT, &"add".to_string()),
+            l.next_token()
+        );
+        assert_eq!(
+            Token::new(TokenType::LPAREN, &"(".to_string()),
+            l.next_token()
+        );
+        assert_eq!(
+            Token::new(TokenType::IDENT, &"five".to_string()),
+            l.next_token()
+        );
+        assert_eq!(
+            Token::new(TokenType::COMMA, &",".to_string()),
+            l.next_token()
+        );
+        assert_eq!(
+            Token::new(TokenType::IDENT, &"ten".to_string()),
+            l.next_token()
+        );
+        assert_eq!(
+            Token::new(TokenType::RPAREN, &")".to_string()),
+            l.next_token()
+        );
+        assert_eq!(
+            Token::new(TokenType::SEMICOLON, &";".to_string()),
+            l.next_token()
+        );
 
-        assert_eq!(Token::new(BANG, &"!".to_string()), l.next_token());
-        assert_eq!(Token::new(MINUS, &"-".to_string()), l.next_token());
-        assert_eq!(Token::new(SLASH, &"/".to_string()), l.next_token());
-        assert_eq!(Token::new(ASTERISK, &"*".to_string()), l.next_token());
-        assert_eq!(Token::new(INT, &"5".to_string()), l.next_token());
-        assert_eq!(Token::new(SEMICOLON, &";".to_string()), l.next_token());
+        assert_eq!(
+            Token::new(TokenType::BANG, &"!".to_string()),
+            l.next_token()
+        );
+        assert_eq!(
+            Token::new(TokenType::MINUS, &"-".to_string()),
+            l.next_token()
+        );
+        assert_eq!(
+            Token::new(TokenType::SLASH, &"/".to_string()),
+            l.next_token()
+        );
+        assert_eq!(
+            Token::new(TokenType::ASTERISK, &"*".to_string()),
+            l.next_token()
+        );
+        assert_eq!(Token::new(TokenType::INT, &"5".to_string()), l.next_token());
+        assert_eq!(
+            Token::new(TokenType::SEMICOLON, &";".to_string()),
+            l.next_token()
+        );
 
-        assert_eq!(Token::new(INT, &"5".to_string()), l.next_token());
-        assert_eq!(Token::new(LT, &"<".to_string()), l.next_token());
-        assert_eq!(Token::new(INT, &"10".to_string()), l.next_token());
-        assert_eq!(Token::new(GT, &">".to_string()), l.next_token());
-        assert_eq!(Token::new(INT, &"5".to_string()), l.next_token());
-        assert_eq!(Token::new(SEMICOLON, &";".to_string()), l.next_token());
+        assert_eq!(Token::new(TokenType::INT, &"5".to_string()), l.next_token());
+        assert_eq!(Token::new(TokenType::LT, &"<".to_string()), l.next_token());
+        assert_eq!(
+            Token::new(TokenType::INT, &"10".to_string()),
+            l.next_token()
+        );
+        assert_eq!(Token::new(TokenType::GT, &">".to_string()), l.next_token());
+        assert_eq!(Token::new(TokenType::INT, &"5".to_string()), l.next_token());
+        assert_eq!(
+            Token::new(TokenType::SEMICOLON, &";".to_string()),
+            l.next_token()
+        );
 
-        assert_eq!(Token::new(IF, &"if".to_string()), l.next_token());
-        assert_eq!(Token::new(LPAREN, &"(".to_string()), l.next_token());
-        assert_eq!(Token::new(INT, &"5".to_string()), l.next_token());
-        assert_eq!(Token::new(LT, &"<".to_string()), l.next_token());
-        assert_eq!(Token::new(INT, &"10".to_string()), l.next_token());
-        assert_eq!(Token::new(RPAREN, &")".to_string()), l.next_token());
-        assert_eq!(Token::new(LBRACE, &"{".to_string()), l.next_token());
-        assert_eq!(Token::new(RETURN, &"return".to_string()), l.next_token());
-        assert_eq!(Token::new(TRUE, &"true".to_string()), l.next_token());
-        assert_eq!(Token::new(SEMICOLON, &";".to_string()), l.next_token());
-        assert_eq!(Token::new(RBRACE, &"}".to_string()), l.next_token());
-        assert_eq!(Token::new(ELSE, &"else".to_string()), l.next_token());
-        assert_eq!(Token::new(LBRACE, &"{".to_string()), l.next_token());
-        assert_eq!(Token::new(RETURN, &"return".to_string()), l.next_token());
-        assert_eq!(Token::new(FALSE, &"false".to_string()), l.next_token());
-        assert_eq!(Token::new(SEMICOLON, &";".to_string()), l.next_token());
-        assert_eq!(Token::new(RBRACE, &"}".to_string()), l.next_token());
+        assert_eq!(Token::new(TokenType::IF, &"if".to_string()), l.next_token());
+        assert_eq!(
+            Token::new(TokenType::LPAREN, &"(".to_string()),
+            l.next_token()
+        );
+        assert_eq!(Token::new(TokenType::INT, &"5".to_string()), l.next_token());
+        assert_eq!(Token::new(TokenType::LT, &"<".to_string()), l.next_token());
+        assert_eq!(
+            Token::new(TokenType::INT, &"10".to_string()),
+            l.next_token()
+        );
+        assert_eq!(
+            Token::new(TokenType::RPAREN, &")".to_string()),
+            l.next_token()
+        );
+        assert_eq!(
+            Token::new(TokenType::LBRACE, &"{".to_string()),
+            l.next_token()
+        );
+        assert_eq!(
+            Token::new(TokenType::RETURN, &"return".to_string()),
+            l.next_token()
+        );
+        assert_eq!(
+            Token::new(TokenType::TRUE, &"true".to_string()),
+            l.next_token()
+        );
+        assert_eq!(
+            Token::new(TokenType::SEMICOLON, &";".to_string()),
+            l.next_token()
+        );
+        assert_eq!(
+            Token::new(TokenType::RBRACE, &"}".to_string()),
+            l.next_token()
+        );
+        assert_eq!(
+            Token::new(TokenType::ELSE, &"else".to_string()),
+            l.next_token()
+        );
+        assert_eq!(
+            Token::new(TokenType::LBRACE, &"{".to_string()),
+            l.next_token()
+        );
+        assert_eq!(
+            Token::new(TokenType::RETURN, &"return".to_string()),
+            l.next_token()
+        );
+        assert_eq!(
+            Token::new(TokenType::FALSE, &"false".to_string()),
+            l.next_token()
+        );
+        assert_eq!(
+            Token::new(TokenType::SEMICOLON, &";".to_string()),
+            l.next_token()
+        );
+        assert_eq!(
+            Token::new(TokenType::RBRACE, &"}".to_string()),
+            l.next_token()
+        );
 
-        assert_eq!(Token::new(INT, &"10".to_string()), l.next_token());
-        assert_eq!(Token::new(EQ, &"==".to_string()), l.next_token());
-        assert_eq!(Token::new(INT, &"10".to_string()), l.next_token());
-        assert_eq!(Token::new(SEMICOLON, &";".to_string()), l.next_token());
-        assert_eq!(Token::new(INT, &"10".to_string()), l.next_token());
-        assert_eq!(Token::new(NOT_EQ, &"!=".to_string()), l.next_token());
-        assert_eq!(Token::new(INT, &"9".to_string()), l.next_token());
-        assert_eq!(Token::new(SEMICOLON, &";".to_string()), l.next_token());
-        assert_eq!(Token::new(EOF, &"".to_string()), l.next_token());
+        assert_eq!(
+            Token::new(TokenType::INT, &"10".to_string()),
+            l.next_token()
+        );
+        assert_eq!(Token::new(TokenType::EQ, &"==".to_string()), l.next_token());
+        assert_eq!(
+            Token::new(TokenType::INT, &"10".to_string()),
+            l.next_token()
+        );
+        assert_eq!(
+            Token::new(TokenType::SEMICOLON, &";".to_string()),
+            l.next_token()
+        );
+        assert_eq!(
+            Token::new(TokenType::INT, &"10".to_string()),
+            l.next_token()
+        );
+        assert_eq!(
+            Token::new(TokenType::NOT_EQ, &"!=".to_string()),
+            l.next_token()
+        );
+        assert_eq!(Token::new(TokenType::INT, &"9".to_string()), l.next_token());
+        assert_eq!(
+            Token::new(TokenType::SEMICOLON, &";".to_string()),
+            l.next_token()
+        );
+        assert_eq!(Token::new(TokenType::EOF, &"".to_string()), l.next_token());
     }
 }

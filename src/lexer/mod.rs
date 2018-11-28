@@ -60,41 +60,41 @@ impl Lexer {
                     let ch = self.ch.clone();
                     self.read_char();
                     let literal: String = ch + self.ch.clone().as_str();
-                    Token::new(EQ, &literal)
+                    Token::new(TokenType::EQ, &literal)
                 }
-                _ => Token::new(ASSIGN, &self.ch),
+                _ => Token::new(TokenType::ASSIGN, &self.ch),
             },
-            "+" => Token::new(PLUS, &self.ch),
-            "-" => Token::new(MINUS, &self.ch),
+            "+" => Token::new(TokenType::PLUS, &self.ch),
+            "-" => Token::new(TokenType::MINUS, &self.ch),
             "!" => match self.clone().peek_char().as_str() {
                 "=" => {
                     let ch = self.ch.clone();
                     self.read_char();
                     let literal: String = ch + self.ch.clone().as_str();
-                    Token::new(NOT_EQ, &literal)
+                    Token::new(TokenType::NOT_EQ, &literal)
                 }
-                _ => Token::new(BANG, &self.ch),
+                _ => Token::new(TokenType::BANG, &self.ch),
             },
 
-            "/" => Token::new(SLASH, &self.ch),
-            "*" => Token::new(ASTERISK, &self.ch),
-            "<" => Token::new(LT, &self.ch),
-            ">" => Token::new(GT, &self.ch),
-            ";" => Token::new(SEMICOLON, &self.ch),
-            "(" => Token::new(LPAREN, &self.ch),
-            ")" => Token::new(RPAREN, &self.ch),
-            "," => Token::new(COMMA, &self.ch),
-            "{" => Token::new(LBRACE, &self.ch),
-            "}" => Token::new(RBRACE, &self.ch),
-            "" => Token::new(EOF, &self.ch),
+            "/" => Token::new(TokenType::SLASH, &self.ch),
+            "*" => Token::new(TokenType::ASTERISK, &self.ch),
+            "<" => Token::new(TokenType::LT, &self.ch),
+            ">" => Token::new(TokenType::GT, &self.ch),
+            ";" => Token::new(TokenType::SEMICOLON, &self.ch),
+            "(" => Token::new(TokenType::LPAREN, &self.ch),
+            ")" => Token::new(TokenType::RPAREN, &self.ch),
+            "," => Token::new(TokenType::COMMA, &self.ch),
+            "{" => Token::new(TokenType::LBRACE, &self.ch),
+            "}" => Token::new(TokenType::RBRACE, &self.ch),
+            "" => Token::new(TokenType::EOF, &self.ch),
             _ => if is_letter(&self.ch) {
                 let literal = &self.read_idenitifier();
                 Token::new(lookup_ident(literal), literal)
             } else if is_digit(&self.ch) {
                 let number = &self.read_number();
-                Token::new(INT, number)
+                Token::new(TokenType::INT, number)
             } else {
-                Token::new(ILLEGAL, &self.ch)
+                Token::new(TokenType::ILLEGAL, &self.ch)
             },
         };
         //println!("{:?}", tok);

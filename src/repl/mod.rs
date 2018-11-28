@@ -16,7 +16,7 @@ pub fn start() {
                 loop {
                     let mut tok = l.next_token();
 
-                    if tok.t_type != EOF {
+                    if tok.t_type != TokenType::EOF {
                         println!("{:?}", tok);
                     } else {
                         break;
