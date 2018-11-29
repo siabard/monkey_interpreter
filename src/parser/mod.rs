@@ -9,40 +9,28 @@ pub struct Parser {
 }
 
 impl Parser {
-    fn new(l: &Lexer) -> Parser {
-        let mut p = Parser {l: l.clone(), cur_token: None, peek_token: None};
+    pub fn new(l: &Lexer) -> Parser {
+        let mut p = Parser {
+            l: l.clone(),
+            cur_token: None,
+            peek_token: None,
+        };
 
         p.next_token();
         p.next_token();
-        
+
         p
     }
 
-    fn next_token(&mut self) {
-        self.cur_token = match self.peek_token {
+    pub fn next_token(&mut self) {
+        self.cur_token = match &self.peek_token {
             Some(tok) => Some(tok.clone()),
             None => None,
         };
-        self.peek_token = Some(self.l.next_token.clone());
+        self.peek_token = Some(self.l.next_token().clone());
     }
 
-    fn parse_program(&mut self) -> Program {
-        let program: Program = Program::new();
-
-        loop {
-            if self.cur_token.Type != EOF {
-                let stmt = self.parse
-            } else {
-                break;
-            }
-        }
-    }
-
-    fn parse_statement(&self) -> Statement {
-        
-    }
-
-    fn parse_let_statement(&self) -> LetStatement {
-        let stmt = LetStatement
+    pub fn parse_program(&mut self) -> Option<Program> {
+        None
     }
 }
